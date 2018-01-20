@@ -1,9 +1,9 @@
 (function() {
     'use strict';
 
-    var support = angular.module("support");
+    var app = angular.module("app");
 
-    support.service("AuthService", function AuthService($q, $state, $firebaseAuth, $window, UserService, MessageService) {
+    app.service("AuthService", function AuthService($q, $state, $firebaseAuth, $window, UserService, MessageService) {
         var service = this;
 
         var authObj = $firebaseAuth();

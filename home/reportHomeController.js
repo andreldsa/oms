@@ -1,9 +1,9 @@
 (function() {
     'use strict';
     
-    var support = angular.module("support");
+    var app = angular.module("app");
 
-    support.controller("ReportHomeController", function ReportHomeController($state, $firebaseArray) {
+    app.controller("ReportHomeController", function ReportHomeController($state, $firebaseArray) {
         var controller = this;
 
         var ref = firebase.database().ref();

@@ -1,9 +1,9 @@
 (function() {
     'use strict';
 
-    var support = angular.module("support");
+    var app = angular.module("app");
 
-    support.service("UserService", function UserService($http, $q) {
+    app.service("UserService", function UserService($http, $q) {
         var service = this;
 
         var USER_URI = "/api/user";

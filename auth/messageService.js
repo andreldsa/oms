@@ -1,9 +1,9 @@
 (function() {
     'use strict';
 
-    var support = angular.module("support");
+    var app = angular.module("app");
 
-    support.service("MessageService", function MessageService($mdToast, $mdDialog) {
+    app.service("MessageService", function MessageService($mdToast, $mdDialog) {
         var service = this;
 
         var msg = {

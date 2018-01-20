@@ -1,9 +1,9 @@
 (function() {
     'use strict';
 
-    var support = angular.module("support");
+    var app = angular.module("app");
 
-    support.controller("LoginController", function LoginController(AuthService, MessageService, $state, $mdDialog, 
+    app.controller("LoginController", function LoginController(AuthService, MessageService, $state, $mdDialog, 
             $stateParams, $location, $window) {
         var loginCtrl = this;
             
@@ -65,13 +65,13 @@
             if (path) {
                 $location.path(path);
             } else {
-                $state.go("support.home");
+                $state.go("app.home");
             }
         }
 
         (function main() {
             if (AuthService.isLoggedIn()) {
-                $state.go("support.home");
+                $state.go("app.home");
             }
         })();
     });

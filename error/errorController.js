@@ -1,16 +1,16 @@
 (function() {
     'use strict';
     
-    var support = angular.module("support");
+    var app = angular.module("app");
 
-    support.controller("ErrorController", function ErrorController($state, $stateParams) {
+    app.controller("ErrorController", function ErrorController($state, $stateParams) {
         var errorCtrl = this;
 
         errorCtrl.msg = $stateParams.msg;
         errorCtrl.status = $stateParams.status;
 
         errorCtrl.goToHome = function goToHome() {
-            $state.go("support.home");
+            $state.go("app.home");
         };
     });
 })();

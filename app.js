@@ -1,7 +1,7 @@
 (function() {
     'use strict';
 
-    var support = angular.module('support', [
+    var app = angular.module('app', [
         'ngMaterial',
         'ui.router',
         'ngAnimate',
@@ -12,7 +12,7 @@
         'ngMask'
     ]);
 
-    support.config(function($mdIconProvider, $mdThemingProvider, $stateProvider, $urlMatcherFactoryProvider,
+    app.config(function($mdIconProvider, $mdThemingProvider, $stateProvider, $urlMatcherFactoryProvider,
         $urlRouterProvider, $locationProvider, $httpProvider, $sceDelegateProvider) {
 
         $mdIconProvider.fontSet('md', 'material-icons');
@@ -25,16 +25,16 @@
         $urlMatcherFactoryProvider.caseInsensitive(true);
 
         $stateProvider
-            .state("support", {
+            .state("app", {
                 abstract: true,
                 views: {
                     main: {
-                        templateUrl: "app/support/support.html",
-                        controller: "SupportController as controller"
+                        templateUrl: "app/main/main.html",
+                        controller: "MainController as controller"
                     }
                 }
             })
-            .state("support.home", {
+            .state("app.home", {
                 url: "/",
                 views: {
                     content: {
@@ -43,12 +43,12 @@
                     }
                 }
             })
-            .state("support.report", {
-                url: "/report",
+            .state("app.client", {
+                url: "/client",
                 views: {
                     content: {
-                        templateUrl: "app/report/report.html",
-                        controller: "ReportController as controller"
+                        templateUrl: "app/client/client.html",
+                        controller: "ClientController as controller"
                     }
                 }
             })
@@ -104,7 +104,7 @@
         moment.updateLocale('pt-br', dateFormats);
     });
 
-    support.factory('BearerAuthInterceptor', function ($injector, $q, $state) {
+    app.factory('BearerAuthInterceptor', function ($injector, $q, $state) {
         return {
             request: function(config) {
                 // var AuthService = $injector.get('AuthService');
@@ -140,7 +140,7 @@
         };
     });
 
-    support.run(function authInterceptor(AuthService, $transitions, $injector, $state, $location) {
+    app.run(function authInterceptor(AuthService, $transitions, $injector, $state, $location) {
         var ignored_routes = [
             'signin'
         ];

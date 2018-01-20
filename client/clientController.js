@@ -1,9 +1,9 @@
 (function () {
     'use strict';
 
-    var support = angular.module("support");
+    var app = angular.module("app");
 
-    support.controller("ReportController", function ReportController($state, MessageService, $firebaseArray, $mdDialog) {
+    app.controller("ClientController", function ClientController($state, MessageService, $firebaseArray, $mdDialog) {
         var controller = this;
 
         controller.clients;

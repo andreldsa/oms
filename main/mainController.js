@@ -1,9 +1,9 @@
 (function() {
     'use strict';
 
-    var support = angular.module('support');
+    var app = angular.module('app');
 
-    support.controller("SupportController", function SupportController($mdSidenav, $state,
+    app.controller("MainController", function MainController($mdSidenav, $state,
             AuthService, $timeout, $scope) {
         var controller = this;
 
@@ -13,23 +13,23 @@
             {
                 label: "Início",
                 icon: "home",
-                action: function() { $state.go("support.home"); }
+                action: function() { $state.go("app.home"); }
             },{
                 label: "Iniciar Pedido",
                 icon: "assignment",
-                action: function() { $state.go("support.report"); }
+                action: function() { }
             },{
                 label: "Nova Carga",
                 icon: "local_shipping",
-                action: function() { $state.go("support.report"); }
+                action: function() { }
             },{
                 label: "Gerenciar Clientes",
                 icon: "supervisor_account",
-                action: function() { $state.go("support.report"); }
+                action: function() { $state.go("app.client"); }
             },{
                 label: "Gerenciar Produtos",
                 icon: "view_module",
-                action: function() { $state.go("support.report"); }
+                action: function() { }
             }
         ];
 
