@@ -6,13 +6,17 @@
   <span flex></span>
   <md-card>
     <md-card-content>
-      <md-tabs md-dynamic-height md-border-bottom>
+      <div layout="column" layout-align="center center" ng-if="!controller.clients">
+        <span class="md-subhead">Carregando Dados</span>
+        <md-progress-circular class="md-hue-2" md-diameter="40px"></md-progress-circular>
+      </div>
+      <md-tabs md-dynamic-height md-border-bottom ng-if="controller.clients">
         <md-tab label="Clientes Cadastrados">
           <md-input-container class="md-block">
             <md-icon>search</md-icon>
-            <input style="font-weight: bold; color: #00695C; " placeholder="Pesquise por nome ou código">
+            <input style="font-weight: bold; color: #00695C; " placeholder="Pesquise por nome ou código" ng-model="searchClient">
           </md-input-container>
-          <md-list-item class="md-3-line" ng-repeat="client in controller.clients" class="noright" ng-click="null">
+          <md-list-item class="md-3-line" ng-repeat="client in controller.clients | orderBy:'name' | filter:searchClient" class="noright" ng-click="controller.showClient(client)">
             <img alt="Foto" ng-src="/app/images/avatar.png" class="md-avatar" />
             <div class="md-list-item-text">
               <h3>{{ client.name }}</h3>
@@ -20,7 +24,7 @@
                 <b>Código:</b> {{ client.code }}</p>
             </div>
             <md-button class="md-icon-button">
-              <md-icon ng-click="null">edit</md-icon>
+              <md-icon ng-click="controller.editClient(client)">edit</md-icon>
             </md-button>
           </md-list-item>
         </md-tab>
@@ -28,29 +32,71 @@
           <form name="saveForm" layout="column">
             <div layout="column" layout-gt-md="row">
               <md-input-container flex-gt-md="70" md-no-float class="md-block">
-                <input style="font-weight: bold; color: #00695C; border: 0; resize:none;" name="Nome" ng-model="controller.client.name"
-                  placeholder="Nome do Cliente">
+                <input style="font-weight: bold; color: #00695C; border: 0; resize:none;" name="Nome" ng-model="controller.newClient.name" placeholder="Nome do Cliente">
               </md-input-container>
               <md-input-container md-no-float class="md-block">
-                <input style="color: #00695C; border: 0; resize:none;" name="Código" ng-model="controller.client.code" type="number" placeholder="Código">
+                <input style="color: #00695C; border: 0; resize:none;" name="Código" ng-model="controller.newClient.code" type="number" placeholder="Código">
               </md-input-container>
             </div>
             <md-input-container md-no-float class="md-block">
-              <input style="color: #00695C; border: 0; resize:none;" name="Endereço" ng-model="controller.client.address" placeholder="Endereço">
+              <input style="color: #00695C; border: 0; resize:none;" name="Endereço" ng-model="controller.newClient.address" placeholder="Endereço">
             </md-input-container>
             <md-input-container md-no-float class="md-block">
-              <input style="color: #00695C; border: 0; resize:none;" name="Telefone" ng-model="controller.client.phone" placeholder="Telefone">
+              <input style="color: #00695C; border: 0; resize:none;" name="Telefone" ng-model="controller.newClient.phone" placeholder="Telefone">
             </md-input-container>
           </form>
           <md-button style="color: #009688" ui-sref="support.home">
             Cancelar
           </md-button>
-          <md-button class="md-raised" md-colors="{background: 'default-teal-500'}" title="Enviar" ng-click="controller.saveClient()"
-            ng-disabled="!controller.isValid(saveForm.$invalid)">
+          <md-button class="md-raised" md-colors="{background: 'default-teal-500'}" title="Enviar" ng-click="controller.createClient()"
+            ng-disabled="!controller.isValid(controller.newClient, saveForm.$invalid)">
             Salvar
           </md-button>
         </md-tab>
       </md-tabs>
     </md-card-content>
   </md-card>
+
+  <div style="visibility: hidden">
+    <div class="md-dialog-container" id="showClient" flex>
+      <md-dialog layout-padding>
+        <b>Nome:</b> <span class="md-subhead">{{controller.selectedClient.name}}</span>
+        <b>Código:</b> <span class="md-subhead">{{controller.selectedClient.code}}</span>
+        <b>Endereço:</b> <span class="md-subhead">{{controller.selectedClient.address}}</span>
+        <b>Telefone:</b> <span class="md-subhead">{{controller.selectedClient.phone}}</span>
+      </md-dialog>
+    </div>
+  </div>
+
+  <div style="visibility: hidden">
+    <div class="md-dialog-container" id="editClient">
+      <md-dialog layout-padding>
+        <form name="saveForm" layout="column">
+          <div layout="column" layout-gt-md="row">
+            <md-input-container flex-gt-md="70" md-no-float class="md-block">
+              <input style="font-weight: bold; color: #00695C; border: 0; resize:none;" name="Nome" ng-model="controller.selectedClient.name"
+                placeholder="Nome do Cliente">
+            </md-input-container>
+            <md-input-container md-no-float class="md-block">
+              <input style="color: #00695C; border: 0; resize:none;" name="Código" ng-model="controller.selectedClient.code" type="number"
+                placeholder="Código">
+            </md-input-container>
+          </div>
+          <md-input-container md-no-float class="md-block">
+            <input style="color: #00695C; border: 0; resize:none;" name="Endereço" ng-model="controller.selectedClient.address" placeholder="Endereço">
+          </md-input-container>
+          <md-input-container md-no-float class="md-block">
+            <input style="color: #00695C; border: 0; resize:none;" name="Telefone" ng-model="controller.selectedClient.phone" placeholder="Telefone">
+          </md-input-container>
+        </form>
+        <md-button style="color: #009688" ng-click="controller.cancelEditClient()">
+          Cancelar
+        </md-button>
+        <md-button class="md-raised" md-colors="{background: 'default-teal-500'}" title="Enviar" ng-click="controller.updateClient()"
+          ng-disabled="!controller.isValid(controller.selectedClient, saveForm.$invalid)">
+          Salvar
+        </md-button>
+      </md-dialog>
+    </div>
+  </div>
 </div>

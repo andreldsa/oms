@@ -3,38 +3,60 @@
 
     var support = angular.module("support");
 
-    support.controller("ReportController", function ReportController($state, MessageService, $firebaseArray) {
+    support.controller("ReportController", function ReportController($state, MessageService, $firebaseArray, $mdDialog) {
         var controller = this;
 
-        controller.client = {};
-
-        controller.clients = [
-            {name: "André Abrantes", code: "46"}
-        ]
+        controller.clients;
+        controller.newClient;
+        controller.selectedClient;
 
         var firebaseRef = firebase.database().ref();
+        var clientsRef = firebaseRef.child("clients/");
+        var firebaseArray = $firebaseArray(clientsRef);
 
-        controller.isValid = function isValid(formInvalid) {
-            return controller.client.name && controller.client.code && !formInvalid;
+
+        controller.isValid = function isValid(client, formInvalid) {
+            return client && client.name && client.code && !formInvalid;
         };
 
-        controller.saveClient = function saveClient() {
-            console.log(controller.client);
-
-            var clientsRef = firebaseRef.child("clients/");
-            var firebaseArray = $firebaseArray(clientsRef);
-            firebaseArray.$loaded().then(function () {
-                firebaseArray.$add(controller.client);
-                controller.client = {};
+        controller.createClient = function createClient() {
+            firebaseArray.$add(controller.newClient).then(function() {
+                controller.newClient = undefined;
+                MessageService.showToast("Cliente cadastrado com sucesso.");
             });
+        };
 
-            MessageService.showToast("Cliente cadastrado com sucesso.");
-            $state.go("support.home");
+        function showDialog(dialogName, clickOutsideToClose) {
+            $mdDialog.show({
+                contentElement: '#' + dialogName,
+                parent: angular.element(document.body),
+                targetEvent: event,
+                clickOutsideToClose: clickOutsideToClose
+            });
+        }
+
+        controller.editClient = function editClient(client, event) {
+            controller.selectedClient = client;
+            showDialog('editClient', false);
+        };
+
+        controller.showClient = function showClient(client, event) {
+            controller.selectedClient = client;
+            showDialog('showClient', true);
+        };
+
+        controller.cancelEditClient = function cancelEditClient() {
+            $mdDialog.cancel();
+        };
+
+        controller.updateClient = function updateClient() {
+            firebaseArray.$save(controller.selectedClient);
+            controller.selectedClient = undefined;
+            $mdDialog.cancel();
+            MessageService.showToast("Cliente atualizado com sucesso.");
         };
 
         (function main() {
-            var clientsRef = firebaseRef.child("clients/");
-            var firebaseArray = $firebaseArray(clientsRef);
             firebaseArray.$loaded().then(function (clients) {
                 controller.clients = clients;
             });
