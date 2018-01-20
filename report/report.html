@@ -1,34 +1,56 @@
 <div layout="column" md-colors="{background: 'blue-grey-100'}">
   <div md-whiteframe="2" layout-padding md-colors="{background: 'grey-100'}" layout="column">
-    <span class="md-headline">Reportar um Problema</span>
-    <span class="md-caption">Preencha o formulário descrevendo o problema</span>
+    <span class="md-headline">Gerenciar seus Clientes</span>
+    <span class="md-caption">Nessa área é possível gerenciar todos os seus clientes cadastrados</span>
   </div>
   <span flex></span>
-
   <md-card>
     <md-card-content>
-      <form name="saveForm" layout="column">
-        <md-input-container md-no-float class="md-block" style="margin: 0px;">
-          <input style="font-weight: bold; color: #00695C; border: 0; resize:none;" name="Título" ng-model="controller.report.title"
-            maxlength="100" placeholder="Nos dê um título representativo">
-        </md-input-container>
-        <md-input-container md-no-float>
-          <textarea style="border: 0; max-height: 400px; resize:none;" name="Descrição" ng-model="controller.report.description" placeholder="Descreva aqui detalhadamente o problema">
-          </textarea>
-          <div ng-messages='saveForm.message.$error'>
-            <div ng-message="required">Você deve descrever o problema!</div>
-          </div>
-        </md-input-container>
-      </form>
+      <md-tabs md-dynamic-height md-border-bottom>
+        <md-tab label="Clientes Cadastrados">
+          <md-input-container class="md-block">
+            <md-icon>search</md-icon>
+            <input style="font-weight: bold; color: #00695C; " placeholder="Pesquise por nome ou código">
+          </md-input-container>
+          <md-list-item class="md-3-line" ng-repeat="client in controller.clients" class="noright" ng-click="null">
+            <img alt="Foto" ng-src="/app/images/avatar.png" class="md-avatar" />
+            <div class="md-list-item-text">
+              <h3>{{ client.name }}</h3>
+              <p>
+                <b>Código:</b> {{ client.code }}</p>
+            </div>
+            <md-button class="md-icon-button">
+              <md-icon ng-click="null">edit</md-icon>
+            </md-button>
+          </md-list-item>
+        </md-tab>
+        <md-tab label="Cadastrar Cliente">
+          <form name="saveForm" layout="column">
+            <div layout="column" layout-gt-md="row">
+              <md-input-container flex-gt-md="70" md-no-float class="md-block">
+                <input style="font-weight: bold; color: #00695C; border: 0; resize:none;" name="Nome" ng-model="controller.client.name"
+                  placeholder="Nome do Cliente">
+              </md-input-container>
+              <md-input-container md-no-float class="md-block">
+                <input style="color: #00695C; border: 0; resize:none;" name="Código" ng-model="controller.client.code" type="number" placeholder="Código">
+              </md-input-container>
+            </div>
+            <md-input-container md-no-float class="md-block">
+              <input style="color: #00695C; border: 0; resize:none;" name="Endereço" ng-model="controller.client.address" placeholder="Endereço">
+            </md-input-container>
+            <md-input-container md-no-float class="md-block">
+              <input style="color: #00695C; border: 0; resize:none;" name="Telefone" ng-model="controller.client.phone" placeholder="Telefone">
+            </md-input-container>
+          </form>
+          <md-button style="color: #009688" ui-sref="support.home">
+            Cancelar
+          </md-button>
+          <md-button class="md-raised" md-colors="{background: 'default-teal-500'}" title="Enviar" ng-click="controller.saveClient()"
+            ng-disabled="!controller.isValid(saveForm.$invalid)">
+            Salvar
+          </md-button>
+        </md-tab>
+      </md-tabs>
     </md-card-content>
-    <md-card-actions style="text-align: right; margin-right: 20px; margin-bottom: 20px;" ng-show="controller.report.title">
-      <md-button style="color: #009688" ui-sref="support.home">
-        Cancelar
-      </md-button>
-      <md-button class="md-raised" md-colors="{background: 'default-teal-500'}" title="Enviar" ng-click="controller.sendReport()"
-        ng-disabled="!controller.isValid(saveForm.$invalid)">
-        Enviar
-      </md-button>
-    </md-card-actions>
   </md-card>
 </div>

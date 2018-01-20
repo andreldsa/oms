@@ -15,8 +15,20 @@
                 icon: "home",
                 action: function() { $state.go("support.home"); }
             },{
-                label: "Reportar um Problema",
-                icon: "bug_report",
+                label: "Iniciar Pedido",
+                icon: "assignment",
+                action: function() { $state.go("support.report"); }
+            },{
+                label: "Nova Carga",
+                icon: "local_shipping",
+                action: function() { $state.go("support.report"); }
+            },{
+                label: "Gerenciar Clientes",
+                icon: "supervisor_account",
+                action: function() { $state.go("support.report"); }
+            },{
+                label: "Gerenciar Produtos",
+                icon: "view_module",
                 action: function() { $state.go("support.report"); }
             }
         ];

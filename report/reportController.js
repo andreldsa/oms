@@ -6,26 +6,38 @@
     support.controller("ReportController", function ReportController($state, MessageService, $firebaseArray) {
         var controller = this;
 
-        controller.report = {};
+        controller.client = {};
 
-        var ref = firebase.database().ref();
+        controller.clients = [
+            {name: "André Abrantes", code: "46"}
+        ]
+
+        var firebaseRef = firebase.database().ref();
 
         controller.isValid = function isValid(formInvalid) {
-            return controller.report.title && controller.report.description && !formInvalid;
+            return controller.client.name && controller.client.code && !formInvalid;
         };
 
-        controller.sendReport = function sendReport() {
-            console.log(controller.report);
+        controller.saveClient = function saveClient() {
+            console.log(controller.client);
 
-            var reportsRef = ref.child("reports/");
-            var firebaseArrayReport = $firebaseArray(reportsRef);
-            firebaseArrayReport.$loaded().then(function () {
-                firebaseArrayReport.$add(controller.report);
+            var clientsRef = firebaseRef.child("clients/");
+            var firebaseArray = $firebaseArray(clientsRef);
+            firebaseArray.$loaded().then(function () {
+                firebaseArray.$add(controller.client);
+                controller.client = {};
             });
 
-
-            MessageService.showToast("Obrigado! Recebemos seu Relatório.");
+            MessageService.showToast("Cliente cadastrado com sucesso.");
             $state.go("support.home");
         };
+
+        (function main() {
+            var clientsRef = firebaseRef.child("clients/");
+            var firebaseArray = $firebaseArray(clientsRef);
+            firebaseArray.$loaded().then(function (clients) {
+                controller.clients = clients;
+            });
+        })();
     });
 })();
