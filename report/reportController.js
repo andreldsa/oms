@@ -45,7 +45,7 @@
             showDialog('showClient', true);
         };
 
-        controller.cancelEditClient = function cancelEditClient() {
+        controller.cancelDialog = function cancelDialog() {
             $mdDialog.cancel();
         };
 
