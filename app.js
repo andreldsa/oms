@@ -38,8 +38,8 @@
                 url: "/",
                 views: {
                     content: {
-                        templateUrl: "app/home/report_home.html",
-                        controller: "ReportHomeController as controller"
+                        templateUrl: "app/home/home.html",
+                        controller: "HomeController as controller"
                     }
                 }
             })

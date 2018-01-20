@@ -3,24 +3,19 @@
 
     var app = angular.module("app");
 
-    app.controller("ClientController", function ClientController($state, MessageService, $firebaseArray, $mdDialog) {
+    app.controller("ClientController", function ClientController($state, MessageService, FirebaseService, $mdDialog) {
         var controller = this;
 
         controller.clients;
         controller.newClient;
         controller.selectedClient;
 
-        var firebaseRef = firebase.database().ref();
-        var clientsRef = firebaseRef.child("clients/");
-        var firebaseArray = $firebaseArray(clientsRef);
-
-
         controller.isValid = function isValid(client, formInvalid) {
             return client && client.name && client.code && !formInvalid;
         };
 
         controller.createClient = function createClient() {
-            firebaseArray.$add(controller.newClient).then(function() {
+            FirebaseService.addClient(controller.newClient).then(function() {
                 controller.newClient = undefined;
                 MessageService.showToast("Cliente cadastrado com sucesso.");
             });
@@ -50,16 +45,15 @@
         };
 
         controller.updateClient = function updateClient() {
-            firebaseArray.$save(controller.selectedClient);
-            controller.selectedClient = undefined;
-            $mdDialog.cancel();
-            MessageService.showToast("Cliente atualizado com sucesso.");
+            FirebaseService.updateClient(controller.selectedClient).then(function() {
+                controller.selectedClient = undefined;
+                $mdDialog.cancel();
+                MessageService.showToast("Cliente atualizado com sucesso.");
+            });
         };
 
         (function main() {
-            firebaseArray.$loaded().then(function (clients) {
-                controller.clients = clients;
-            });
+            controller.clients = FirebaseService.getClients();
         })();
     });
 })();
