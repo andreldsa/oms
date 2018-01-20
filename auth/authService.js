@@ -1,9 +1,9 @@
-(function() {
+(function () {
     'use strict';
 
     var app = angular.module("app");
 
-    app.service("AuthService", function AuthService($q, $state, $firebaseAuth, $window, UserService, MessageService) {
+    app.service("AuthService", function AuthService($q, $state, $firebaseAuth, $firebaseArray, $window, UserService, MessageService) {
         var service = this;
 
         var authObj = $firebaseAuth();
@@ -16,59 +16,40 @@
         var refreshTokenPromise = null;
 
         /**
-        * Store listeners to be executed when user logout is called.
-        */
+         * Store listeners to be executed when user logout is called.
+         */
         var onLogoutListeners = [];
 
         Object.defineProperty(service, 'user', {
-            get: function() {
+            get: function () {
                 return userInfo;
             }
         });
 
-        service.login = function login() {
+        function validateUserPermission(uid) {
             var deferred = $q.defer();
-            authObj.$signInWithPopup("google").then(function(result) {
-                configUser(result.user);
-                deferred.resolve(userInfo);
-            }).catch(function(error) {
-                MessageService.showToast(error);
+            var ref = firebase.database().ref();
+            var reportsRef = ref.child("valid_accounts/");
+            var firebaseArrayReport = $firebaseArray(ref);
+            firebaseArrayReport.$loaded().then(function (accounts) {
+                deferred.resolve();                    
+            }, function (error) {
                 deferred.reject(error);
             });
             return deferred.promise;
-        };
+        }
 
         service.loginWithEmailAndPassword = function loginWithEmailAndPassword(email, password) {
             var deferred = $q.defer();
-            authObj.$signInWithEmailAndPassword(email, password).then(function(user) {
-                if (user.emailVerified) {
-                    user.getIdToken(true).then(function(idToken) {
-                        service.setupUser(idToken, user.emailVerified).then(function success(userInfo) {
-                            deferred.resolve(userInfo);
-                        });
-                    });
-                } else {
-                    service.sendEmailVerification(user);
-                    MessageService.showToast("Seu email precisa ser verificado.");
-                    deferred.reject("Email not verified.");
-                }
-            }).catch(function(error) {
-                MessageService.showToast(error);
-                deferred.reject(error);
-            });
-            return deferred.promise;
-        };
-
-        service.signupWithEmailAndPassword = function signupWithEmailAndPassword(email, password) {
-            var deferred = $q.defer();
-            authObj.$createUserWithEmailAndPassword(email, password).then(function(user) {
-                service.sendEmailVerification();
-                var idToken = user.toJSON().stsTokenManager.accessToken;
-                service.setupUser(idToken, user.emailVerified).then(function success(userInfo) {
-                    service.sendEmailVerification();
+            authObj.$signInWithEmailAndPassword(email, password).then(function (user) {
+                validateUserPermission(user.uid).then(function () {
+                    configUser(user);
                     deferred.resolve(userInfo);
-                });
-            }).catch(function(error) {
+                }, function (error) {
+                    MessageService.showToast(error);
+                    deferred.reject(error);
+                })
+            }).catch(function (error) {
                 MessageService.showToast(error);
                 deferred.reject(error);
             });
@@ -76,19 +57,17 @@
         };
 
         service.logout = function logout() {
-            authObj.$signOut();
             delete $window.localStorage.userInfo;
             userInfo = undefined;
-
             executeLogoutListeners();
-
             $state.go("signin");
+            authObj.$signOut();
         };
 
         service.getCurrentUser = function getCurrentUser() {
             return userInfo;
         };
-        
+
         service.getUserToken = function getUserToken() {
             refreshTokenAsync();
             return userInfo.accessToken;
@@ -101,7 +80,7 @@
             return false;
         };
 
-        service.save = function() {
+        service.save = function () {
             $window.localStorage.userInfo = JSON.stringify(userInfo);
         };
 
@@ -121,40 +100,26 @@
             return deferred.promise;
         };
 
-        service.sendEmailVerification = function sendEmailVerification(user) {
-            var auth_user = user || authObj.$getAuth();
-            auth_user.sendEmailVerification().then(
-            function success() {
-                MessageService.showToast('Email de verificação enviado para o seu email.');
-            }, function error(error) {
-                console.error(error);
-            });
-        };
-
         service.resetPassword = function resetPassword(email) {
             authObj.$sendPasswordResetEmail(email).then(
-            function success() {
-                MessageService.showToast('Você receberá um email para resetar sua senha.');
-            }, function error(error) {
-                console.error(error);
-            });
+                function success() {
+                    MessageService.showToast('Você receberá um email para resetar sua senha.');
+                },
+                function error(error) {
+                    console.error(error);
+                });
         };
 
         service.$onLogout = function $onLogout(callback) {
             onLogoutListeners.push(callback);
         };
 
-        service.emailVerified = function emailVerified() {
-            if (userInfo) return userInfo.emailVerified;
-            return false;
-        };
-
         /**
-        * Execute each function stored to be thriggered when user logout
-        * is called.
-        */
+         * Execute each function stored to be thriggered when user logout
+         * is called.
+         */
         function executeLogoutListeners() {
-            _.each(onLogoutListeners, function(callback) {
+            _.each(onLogoutListeners, function (callback) {
                 callback();
             });
         }
@@ -184,7 +149,7 @@
             var auth = authObj.$getAuth();
             if (auth && !refreshTokenPromise) {
                 refreshTokenPromise = auth.getIdToken();
-                refreshTokenPromise.then(function(idToken) {
+                refreshTokenPromise.then(function (idToken) {
                     userInfo.accessToken = idToken;
                     service.save();
                     refreshTokenPromise = null;
