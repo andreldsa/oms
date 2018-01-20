@@ -3,7 +3,7 @@
 
     var app = angular.module("app");
 
-    app.controller("ClientController", function ClientController($state, MessageService, FirebaseService, $mdDialog) {
+    app.controller("ProductController", function ProductController($state, MessageService, FirebaseService, $mdDialog) {
         var controller = this;
 
         controller.clients;

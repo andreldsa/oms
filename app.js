@@ -52,6 +52,24 @@
                     }
                 }
             })
+            .state("app.shipment", {
+                url: "/shipment",
+                views: {
+                    content: {
+                        templateUrl: "app/shipment/shipment.html",
+                        controller: "ShipmentController as controller"
+                    }
+                }
+            })
+            .state("app.product", {
+                url: "/product",
+                views: {
+                    content: {
+                        templateUrl: "app/product/product.html",
+                        controller: "ProductController as controller"
+                    }
+                }
+            })
             .state("signin", {
                 url: "/signin",
                 views: {

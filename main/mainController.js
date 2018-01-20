@@ -21,7 +21,7 @@
             },{
                 label: "Gerenciar Cargas",
                 icon: "assignment",
-                action: function() { }
+                action: function() { $state.go("app.shipment"); }
             },{
                 label: "Gerenciar Clientes",
                 icon: "supervisor_account",
@@ -29,7 +29,7 @@
             },{
                 label: "Gerenciar Produtos",
                 icon: "view_module",
-                action: function() { }
+                action: function() { $state.go("app.product"); }
             }
         ];
 

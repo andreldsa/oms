@@ -1,13 +1,13 @@
 <div layout="column" md-colors="{background: 'blue-grey-100'}">
   <div md-whiteframe="2" layout-padding md-colors="{background: 'grey-100'}" layout="column">
-    <span class="md-headline">Gerenciar seus Clientes</span>
-    <span class="md-caption">Nessa área é possível gerenciar todos os seus clientes cadastrados</span>
+    <span class="md-headline">Gerenciar seus Produtos</span>
+    <span class="md-caption">Nessa área é possível gerenciar todos os seus produtos cadastrados</span>
   </div>
   <span flex></span>
   <md-card>
     <md-card-content>
       <div layout="column" layout-align="center center" ng-if="!controller.clients">
-        <span class="md-subhead">Carregando Dados</span>
+        <span class="md-subhead">Carregando Dados dos Produtos</span>
         <md-progress-circular class="md-hue-2" md-diameter="40px"></md-progress-circular>
       </div>
       <md-tabs md-dynamic-height md-border-bottom ng-if="controller.clients">
