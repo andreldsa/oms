@@ -15,12 +15,12 @@
                 icon: "home",
                 action: function() { $state.go("app.home"); }
             },{
-                label: "Iniciar Pedido",
-                icon: "assignment",
-                action: function() { }
-            },{
                 label: "Nova Carga",
                 icon: "local_shipping",
+                action: function() { }
+            },{
+                label: "Gerenciar Cargas",
+                icon: "assignment",
                 action: function() { }
             },{
                 label: "Gerenciar Clientes",
