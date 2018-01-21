@@ -6,52 +6,43 @@
   <span flex></span>
   <md-card>
     <md-card-content>
-      <div layout="column" layout-align="center center" ng-if="!controller.clients">
+      <div layout="column" layout-align="center center" ng-if="!controller.shipments">
         <span class="md-subhead">Carregando Dados das Cargas</span>
         <md-progress-circular class="md-hue-2" md-diameter="40px"></md-progress-circular>
       </div>
-      <md-tabs md-dynamic-height md-border-bottom ng-if="controller.clients">
-        <md-tab label="Clientes Cadastrados">
+      <md-tabs md-dynamic-height md-border-bottom ng-if="controller.shipments">
+        <md-tab label="Cargas Cadastradas">
           <md-input-container class="md-block">
             <md-icon>search</md-icon>
-            <input style="font-weight: bold; color: #00695C; " placeholder="Pesquise por nome ou código" ng-model="searchClient">
+            <input style="font-weight: bold; color: #00695C; " placeholder="Pesquise por nome ou código" ng-model="search">
           </md-input-container>
-          <md-list-item class="md-3-line" ng-repeat="client in controller.clients | orderBy:'name' | filter:searchClient" class="noright"
-            ng-click="controller.showClient(client)">
-            <img alt="Foto" ng-src="/app/images/avatar.png" class="md-avatar" />
+          <md-list-item class="md-3-line" ng-repeat="shipment in controller.shipments | orderBy:'refDate' | filter:search" class="noright"
+            ng-click="controller.showShipment(shipment)">
+            <md-icon>local_shipping</md-icon>
             <div class="md-list-item-text">
-              <h3>{{ client.name }}</h3>
+              <h3>{{ shipment.refDate | date:'dd-MM-yyyy' }}</h3>
               <p>
-                <b>Código:</b> {{ client.code }}</p>
+                <b>Obs.:</b> {{ shipment.description || "N/A" }}</p>
             </div>
             <md-button class="md-icon-button">
-              <md-icon ng-click="controller.editClient(client)">edit</md-icon>
+              <md-icon ng-click="controller.editShipment(shipment)">edit</md-icon>
             </md-button>
           </md-list-item>
         </md-tab>
-        <md-tab label="Cadastrar Cliente">
-          <form name="saveForm" layout="column">
-            <div layout="column" layout-gt-md="row">
-              <md-input-container flex-gt-md="70" md-no-float class="md-block">
-                <input style="font-weight: bold; color: #00695C; border: 0; resize:none;" name="Nome" ng-model="controller.newClient.name"
-                  placeholder="Nome do Cliente">
-              </md-input-container>
-              <md-input-container md-no-float class="md-block">
-                <input style="color: #00695C; border: 0; resize:none;" name="Código" ng-model="controller.newClient.code" type="number" placeholder="Código">
-              </md-input-container>
-            </div>
-            <md-input-container md-no-float class="md-block">
-              <input style="color: #00695C; border: 0; resize:none;" name="Endereço" ng-model="controller.newClient.address" placeholder="Endereço">
-            </md-input-container>
-            <md-input-container md-no-float class="md-block">
-              <input style="color: #00695C; border: 0; resize:none;" name="Telefone" ng-model="controller.newClient.phone" placeholder="Telefone">
-            </md-input-container>
-          </form>
+        <md-tab label="Nova Carga">
+          <div flex-gt-xs>
+            <h4>Data de Referência da Carga</h4>
+            <md-datepicker ng-model="controller.newShipment.refDate" md-placeholder="Selecione" md-open-on-focus></md-datepicker>
+          </div>
+          <md-input-container flex-gt-md="70" class="md-block">
+            <input style="font-weight: bold; color: #00695C; border: 0; resize:none;" name="Descrição" ng-model="controller.newShipment.description"
+              placeholder="Descrição | Observações">
+          </md-input-container>
           <md-button style="color: #009688" ui-sref="app.home">
             Cancelar
           </md-button>
-          <md-button class="md-raised" md-colors="{background: 'default-teal-500'}" title="Enviar" ng-click="controller.createClient()"
-            ng-disabled="!controller.isValid(controller.newClient, saveForm.$invalid)">
+          <md-button class="md-raised" md-colors="{background: 'default-teal-500'}" title="Enviar" ng-click="controller.createShipment()"
+            ng-disabled="!controller.isValid(controller.newShipment, saveForm.$invalid)">
             Salvar
           </md-button>
         </md-tab>
@@ -60,7 +51,7 @@
   </md-card>
 
   <div style="visibility: hidden">
-    <div class="md-dialog-container" id="showClient" flex>
+    <div class="md-dialog-container" id="showShipment" flex>
       <md-dialog flex="95" flex-gt-md="50">
         <md-toolbar md-colors="{background: 'teal-800'}">
           <div class="md-toolbar-tools">
@@ -72,21 +63,17 @@
           </div>
         </md-toolbar>
         <div layout-padding layout="column">
-          <b>Nome:</b>
-          <span class="md-subhead">{{controller.selectedClient.name}}</span>
-          <b>Código:</b>
-          <span class="md-subhead">{{controller.selectedClient.code}}</span>
-          <b>Endereço:</b>
-          <span class="md-subhead">{{controller.selectedClient.address}}</span>
-          <b>Telefone:</b>
-          <span class="md-subhead">{{controller.selectedClient.phone}}</span>
+          <b>Data de Referência:</b>
+          <span class="md-subhead">{{controller.selectedShipment.refDate | date:'dd-MM-yyyy' }}</span>
+          <b>Descrição | Observações:</b>
+          <span class="md-subhead">{{controller.selectedShipment.description}}</span>
         </div>
       </md-dialog>
     </div>
   </div>
 
   <div style="visibility: hidden; ">
-    <div class="md-dialog-container" id="editClient" flex >
+    <div class="md-dialog-container" id="editShipment" flex>
       <md-dialog flex="95" flex-gt-md="50">
         <md-toolbar md-colors="{background: 'teal-800'}">
           <div class="md-toolbar-tools">
@@ -98,26 +85,16 @@
           </div>
         </md-toolbar>
         <div layout-padding layout="column">
-          <form name="saveForm" layout="column">
-            <div layout="column" layout-gt-md="row">
-              <md-input-container flex-gt-md="70" class="md-block">
-                <input style="font-weight: bold; color: #00695C; border: 0; resize:none;" name="Nome" ng-model="controller.selectedClient.name"
-                  placeholder="Nome do Cliente">
-              </md-input-container>
-              <md-input-container class="md-block">
-                <input style="color: #00695C; border: 0; resize:none;" name="Código" ng-model="controller.selectedClient.code" type="number"
-                  placeholder="Código">
-              </md-input-container>
-            </div>
-            <md-input-container class="md-block">
-              <input style="color: #00695C; border: 0; resize:none;" name="Endereço" ng-model="controller.selectedClient.address" placeholder="Endereço">
-            </md-input-container>
-            <md-input-container class="md-block">
-              <input style="color: #00695C; border: 0; resize:none;" name="Telefone" ng-model="controller.selectedClient.phone" placeholder="Telefone">
-            </md-input-container>
-          </form>
-          <md-button class="md-raised" md-colors="{background: 'default-teal-500'}" title="Enviar" ng-click="controller.updateClient()"
-            ng-disabled="!controller.isValid(controller.selectedClient, saveForm.$invalid)">
+          <div flex-gt-xs>
+            <h4>Data de Referência da Carga</h4>
+            <md-datepicker ng-model="controller.selectedShipment.refDate" md-placeholder="Selecione" md-open-on-focus></md-datepicker>
+          </div>
+          <md-input-container flex-gt-md="70" class="md-block">
+            <input style="font-weight: bold; color: #00695C; border: 0; resize:none;" name="Descrição" ng-model="controller.selectedShipment.description"
+              placeholder="Descrição | Observações">
+          </md-input-container>
+          <md-button class="md-raised" md-colors="{background: 'default-teal-500'}" title="Enviar" ng-click="controller.updateShipment()"
+            ng-disabled="!controller.isValid(controller.selectedShipment, saveForm.$invalid)">
             Salvar
           </md-button>
         </div>

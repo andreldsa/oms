@@ -6,18 +6,21 @@
     app.controller("ShipmentController", function ShipmentController($state, MessageService, FirebaseService, $mdDialog) {
         var controller = this;
 
-        controller.clients;
-        controller.newClient;
-        controller.selectedClient;
+        controller.shipments;
+        controller.newShipment;
+        controller.selectedShipment;
 
-        controller.isValid = function isValid(client, formInvalid) {
-            return client && client.name && client.code && !formInvalid;
+        controller.isValid = function isValid(shipment, formInvalid) {
+            return shipment && shipment.refDate && !formInvalid;
         };
 
-        controller.createClient = function createClient() {
-            FirebaseService.addClient(controller.newClient).then(function() {
-                controller.newClient = undefined;
-                MessageService.showToast("Cliente cadastrado com sucesso.");
+        controller.createShipment = function createShipment() {
+            controller.newShipment.refDate = controller.newShipment.refDate.toISOString();
+            FirebaseService.addShipment(controller.newShipment).then(function() {
+                controller.newShipment = undefined;
+                MessageService.showToast("Carga cadastrada com sucesso.");
+            }, function(error) {
+                console.log(error);
             });
         };
 
@@ -30,30 +33,34 @@
             });
         }
 
-        controller.editClient = function editClient(client, event) {
-            controller.selectedClient = client;
-            showDialog('editClient', false);
+        controller.editShipment = function editShipment(shipment, event) {
+            controller.selectedShipment = shipment;
+            showDialog('editShipment', false);
         };
 
-        controller.showClient = function showClient(client, event) {
-            controller.selectedClient = client;
-            showDialog('showClient', true);
+        controller.showShipment = function showShipment(shipment, event) {
+            controller.selectedShipment = shipment;
+            showDialog('showShipment', true);
         };
 
         controller.cancelDialog = function cancelDialog() {
             $mdDialog.cancel();
         };
 
-        controller.updateClient = function updateClient() {
-            FirebaseService.updateClient(controller.selectedClient).then(function() {
-                controller.selectedClient = undefined;
+        controller.updateShipment = function updateShipment() {
+            var date = controller.selectedShipment.refDate;
+            if (date instanceof Date) {
+                controller.selectedShipment.refDate = date.toISOString();
+            }
+            FirebaseService.updateShipment(controller.selectedShipment).then(function() {
+                controller.selectedShipment = undefined;
                 $mdDialog.cancel();
-                MessageService.showToast("Cliente atualizado com sucesso.");
+                MessageService.showToast("Carga atualizada com sucesso.");
             });
         };
 
         (function main() {
-            controller.clients = FirebaseService.getClients();
+            controller.shipments = FirebaseService.getShipments();
         })();
     });
 })();

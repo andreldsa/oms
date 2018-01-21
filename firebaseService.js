@@ -13,6 +13,9 @@
 
         var productsRef = firebaseRef.child("products/");
         var productsArray = $firebaseArray(productsRef);
+        
+        var shipmentsRef = firebaseRef.child("shipments/");
+        var shipmentsArray = $firebaseArray(shipmentsRef);
 
         service.addClient = function addClient(client) {
             return clientsArray.$add(client);
@@ -26,16 +29,28 @@
             return clientsArray;
         };
 
-        service.addProduct = function addProduct(client) {
-            return productsArray.$add(client);
+        service.addProduct = function addProduct(product) {
+            return productsArray.$add(product);
         };
 
-        service.updateProduct = function updateProduct(client) {
-            return productsArray.$save(client);
+        service.updateProduct = function updateProduct(product) {
+            return productsArray.$save(product);
         };
 
         service.getProducts = function getProducts() {
             return productsArray;
+        };
+
+        service.addShipment = function addShipment(shipment) {
+            return shipmentsArray.$add(shipment);
+        };
+
+        service.updateShipment = function updateShipment(shipment) {
+            return shipmentsArray.$save(shipment);
+        };
+
+        service.getShipments = function getShipments() {
+            return shipmentsArray;
         };
     });
 })();
