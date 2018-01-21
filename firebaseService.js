@@ -11,6 +11,9 @@
         var clientsRef = firebaseRef.child("clients/");
         var clientsArray = $firebaseArray(clientsRef);
 
+        var productsRef = firebaseRef.child("products/");
+        var productsArray = $firebaseArray(productsRef);
+
         service.addClient = function addClient(client) {
             return clientsArray.$add(client);
         };
@@ -23,5 +26,16 @@
             return clientsArray;
         };
 
+        service.addProduct = function addProduct(client) {
+            return productsArray.$add(client);
+        };
+
+        service.updateProduct = function updateProduct(client) {
+            return productsArray.$save(client);
+        };
+
+        service.getProducts = function getProducts() {
+            return productsArray;
+        };
     });
 })();

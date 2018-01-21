@@ -6,18 +6,18 @@
     app.controller("ProductController", function ProductController($state, MessageService, FirebaseService, $mdDialog) {
         var controller = this;
 
-        controller.clients;
-        controller.newClient;
-        controller.selectedClient;
+        controller.products;
+        controller.newProduct;
+        controller.selectedProduct;
 
-        controller.isValid = function isValid(client, formInvalid) {
-            return client && client.name && client.code && !formInvalid;
+        controller.isValid = function isValid(product, formInvalid) {
+            return product && product.name && product.code && !formInvalid;
         };
 
-        controller.createClient = function createClient() {
-            FirebaseService.addClient(controller.newClient).then(function() {
-                controller.newClient = undefined;
-                MessageService.showToast("Cliente cadastrado com sucesso.");
+        controller.createProduct = function createProduct() {
+            FirebaseService.addProduct(controller.newProduct).then(function() {
+                controller.newProduct = undefined;
+                MessageService.showToast("Producte cadastrado com sucesso.");
             });
         };
 
@@ -30,30 +30,30 @@
             });
         }
 
-        controller.editClient = function editClient(client, event) {
-            controller.selectedClient = client;
-            showDialog('editClient', false);
+        controller.editProduct = function editProduct(product, event) {
+            controller.selectedProduct = product;
+            showDialog('editProduct', false);
         };
 
-        controller.showClient = function showClient(client, event) {
-            controller.selectedClient = client;
-            showDialog('showClient', true);
+        controller.showProduct = function showProduct(product, event) {
+            controller.selectedProduct = product;
+            showDialog('showProduct', true);
         };
 
         controller.cancelDialog = function cancelDialog() {
             $mdDialog.cancel();
         };
 
-        controller.updateClient = function updateClient() {
-            FirebaseService.updateClient(controller.selectedClient).then(function() {
-                controller.selectedClient = undefined;
+        controller.updateProduct = function updateProduct() {
+            FirebaseService.updateProduct(controller.selectedProduct).then(function() {
+                controller.selectedProduct = undefined;
                 $mdDialog.cancel();
-                MessageService.showToast("Cliente atualizado com sucesso.");
+                MessageService.showToast("Producte atualizado com sucesso.");
             });
         };
 
         (function main() {
-            controller.clients = FirebaseService.getClients();
+            controller.products = FirebaseService.getProducts();
         })();
     });
 })();

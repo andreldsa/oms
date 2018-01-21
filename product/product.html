@@ -6,52 +6,61 @@
   <span flex></span>
   <md-card>
     <md-card-content>
-      <div layout="column" layout-align="center center" ng-if="!controller.clients">
+      <div layout="column" layout-align="center center" ng-if="!controller.products">
         <span class="md-subhead">Carregando Dados dos Produtos</span>
         <md-progress-circular class="md-hue-2" md-diameter="40px"></md-progress-circular>
       </div>
-      <md-tabs md-dynamic-height md-border-bottom ng-if="controller.clients">
-        <md-tab label="Clientes Cadastrados">
+      <md-tabs md-dynamic-height md-border-bottom ng-if="controller.products">
+        <md-tab label="Produtos Cadastrados">
           <md-input-container class="md-block">
             <md-icon>search</md-icon>
-            <input style="font-weight: bold; color: #00695C; " placeholder="Pesquise por nome ou código" ng-model="searchClient">
+            <input style="font-weight: bold; color: #00695C; " placeholder="Pesquise por nome ou código" ng-model="search">
           </md-input-container>
-          <md-list-item class="md-3-line" ng-repeat="client in controller.clients | orderBy:'name' | filter:searchClient" class="noright"
-            ng-click="controller.showClient(client)">
+          <md-list-item class="md-3-line" ng-repeat="product in controller.products | orderBy:'name' | filter:search" class="noright"
+            ng-click="controller.showProduct(product)">
             <img alt="Foto" ng-src="/app/images/avatar.png" class="md-avatar" />
             <div class="md-list-item-text">
-              <h3>{{ client.name }}</h3>
+              <h3>{{ product.name }}</h3>
               <p>
-                <b>Código:</b> {{ client.code }}</p>
+                <b>Código:</b> {{ product.code }}</p>
             </div>
             <md-button class="md-icon-button">
-              <md-icon ng-click="controller.editClient(client)">edit</md-icon>
+              <md-icon ng-click="controller.editProduct(product)">edit</md-icon>
             </md-button>
           </md-list-item>
         </md-tab>
-        <md-tab label="Cadastrar Cliente">
+        <md-tab label="Cadastrar Produto">
           <form name="saveForm" layout="column">
             <div layout="column" layout-gt-md="row">
               <md-input-container flex-gt-md="70" md-no-float class="md-block">
-                <input style="font-weight: bold; color: #00695C; border: 0; resize:none;" name="Nome" ng-model="controller.newClient.name"
-                  placeholder="Nome do Cliente">
+                <input style="font-weight: bold; color: #00695C; border: 0; resize:none;" name="Nome" ng-model="controller.newProduct.name"
+                  placeholder="Nome do Produto">
               </md-input-container>
               <md-input-container md-no-float class="md-block">
-                <input style="color: #00695C; border: 0; resize:none;" name="Código" ng-model="controller.newClient.code" type="number" placeholder="Código">
+                <input style="color: #00695C; border: 0; resize:none;" name="Código" ng-model="controller.newProduct.code" type="number"
+                  placeholder="Código">
               </md-input-container>
             </div>
             <md-input-container md-no-float class="md-block">
-              <input style="color: #00695C; border: 0; resize:none;" name="Endereço" ng-model="controller.newClient.address" placeholder="Endereço">
+              <b>Preço:</b> {{controller.newProduct.price | currency:'R$ '}}
+              <input type="number" style="color: #00695C; border: 0; resize:none;" name="Endereço" ng-model="controller.newProduct.price"
+                placeholder="Digite o preço do produto">
             </md-input-container>
             <md-input-container md-no-float class="md-block">
-              <input style="color: #00695C; border: 0; resize:none;" name="Telefone" ng-model="controller.newClient.phone" placeholder="Telefone">
+              <md-select ng-model="controller.newProduct.unit" placeholder="Unidade de Medida">
+                <md-option value="bj">Bandeja</md-option>
+                <md-option value="cx">Caixa</md-option>
+                <md-option value="kg">Kilograma</md-option>
+                <md-option value="sc">Saco</md-option>
+                <md-option value="un">Unidade</md-option>
+              </md-select>
             </md-input-container>
           </form>
           <md-button style="color: #009688" ui-sref="app.home">
             Cancelar
           </md-button>
-          <md-button class="md-raised" md-colors="{background: 'default-teal-500'}" title="Enviar" ng-click="controller.createClient()"
-            ng-disabled="!controller.isValid(controller.newClient, saveForm.$invalid)">
+          <md-button class="md-raised" md-colors="{background: 'default-teal-500'}" title="Enviar" ng-click="controller.createProduct()"
+            ng-disabled="!controller.isValid(controller.newProduct, saveForm.$invalid)">
             Salvar
           </md-button>
         </md-tab>
@@ -60,7 +69,7 @@
   </md-card>
 
   <div style="visibility: hidden">
-    <div class="md-dialog-container" id="showClient" flex>
+    <div class="md-dialog-container" id="showProduct" flex>
       <md-dialog flex="95" flex-gt-md="50">
         <md-toolbar md-colors="{background: 'teal-800'}">
           <div class="md-toolbar-tools">
@@ -73,20 +82,20 @@
         </md-toolbar>
         <div layout-padding layout="column">
           <b>Nome:</b>
-          <span class="md-subhead">{{controller.selectedClient.name}}</span>
+          <span class="md-subhead">{{controller.selectedProduct.name}}</span>
           <b>Código:</b>
-          <span class="md-subhead">{{controller.selectedClient.code}}</span>
-          <b>Endereço:</b>
-          <span class="md-subhead">{{controller.selectedClient.address}}</span>
-          <b>Telefone:</b>
-          <span class="md-subhead">{{controller.selectedClient.phone}}</span>
+          <span class="md-subhead">{{controller.selectedProduct.code}}</span>
+          <b>Preço:</b>
+          <span class="md-subhead">{{controller.selectedProduct.price | currency:'R$ '}}</span>
+          <b>Unidade:</b>
+          <span class="md-subhead">{{controller.selectedProduct.unit}}</span>
         </div>
       </md-dialog>
     </div>
   </div>
 
   <div style="visibility: hidden; ">
-    <div class="md-dialog-container" id="editClient" flex >
+    <div class="md-dialog-container" id="editProduct" flex>
       <md-dialog flex="95" flex-gt-md="50">
         <md-toolbar md-colors="{background: 'teal-800'}">
           <div class="md-toolbar-tools">
@@ -101,23 +110,31 @@
           <form name="saveForm" layout="column">
             <div layout="column" layout-gt-md="row">
               <md-input-container flex-gt-md="70" class="md-block">
-                <input style="font-weight: bold; color: #00695C; border: 0; resize:none;" name="Nome" ng-model="controller.selectedClient.name"
-                  placeholder="Nome do Cliente">
+                <input style="font-weight: bold; color: #00695C; border: 0; resize:none;" name="Nome" ng-model="controller.selectedProduct.name"
+                  placeholder="Nome do Produto">
               </md-input-container>
               <md-input-container class="md-block">
-                <input style="color: #00695C; border: 0; resize:none;" name="Código" ng-model="controller.selectedClient.code" type="number"
+                <input style="color: #00695C; border: 0; resize:none;" name="Código" ng-model="controller.selectedProduct.code" type="number"
                   placeholder="Código">
               </md-input-container>
             </div>
+            <p align="right"><b>Preço:</b> {{controller.selectedProduct.price | currency:'R$ '}}</p>
             <md-input-container class="md-block">
-              <input style="color: #00695C; border: 0; resize:none;" name="Endereço" ng-model="controller.selectedClient.address" placeholder="Endereço">
+              <input type="number" style="color: #00695C; border: 0; resize:none;" name="Endereço" ng-model="controller.selectedProduct.price"
+                placeholder="Digite o preço do produto">
             </md-input-container>
             <md-input-container class="md-block">
-              <input style="color: #00695C; border: 0; resize:none;" name="Telefone" ng-model="controller.selectedClient.phone" placeholder="Telefone">
+              <md-select ng-model="controller.selectedProduct.unit" placeholder="Unidade de Medida">
+                <md-option value="bj">Bandeja</md-option>
+                <md-option value="cx">Caixa</md-option>
+                <md-option value="kg">Kilograma</md-option>
+                <md-option value="sc">Saco</md-option>
+                <md-option value="un">Unidade</md-option>
+              </md-select>
             </md-input-container>
           </form>
-          <md-button class="md-raised" md-colors="{background: 'default-teal-500'}" title="Enviar" ng-click="controller.updateClient()"
-            ng-disabled="!controller.isValid(controller.selectedClient, saveForm.$invalid)">
+          <md-button class="md-raised" md-colors="{background: 'default-teal-500'}" title="Enviar" ng-click="controller.updateProduct()"
+            ng-disabled="!controller.isValid(controller.selectedProduct, saveForm.$invalid)">
             Salvar
           </md-button>
         </div>
