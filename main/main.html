@@ -1,33 +1,27 @@
-<section layout="row" flex  md-colors="{background: 'blue-grey-100'}">
-  <md-sidenav
-      md-colors="{background: 'teal-900'}"
-      class="md-sidenav-left"
-      md-component-id="left"
-      md-is-locked-open="$mdMedia('gt-md')"
-      md-whiteframe="3">
+<section layout="row" flex md-colors="{background: 'blue-grey-100'}">
+  <md-sidenav md-colors="{background: 'teal-900'}" class="md-sidenav-left" md-component-id="left" md-is-locked-open="$mdMedia('gt-md')"
+    md-whiteframe="3">
     <md-toolbar md-colors="{background: 'teal-700'}" layout-align="start center" layout="row">
-        <md-button ng-click="close()" class="md-icon-button" >
-          <md-icon>arrow_back</md-icon>
-        </md-button>
-        <span class="md-subhead" ui-sref="app.home">Aguinaldo Abrantes | Pedidos</span>
+      <md-button ng-click="close()" class="md-icon-button">
+        <md-icon>arrow_back</md-icon>
+      </md-button>
+      <span class="md-subhead" ui-sref="app.home">Aguinaldo Abrantes | Pedidos</span>
     </md-toolbar>
     <md-content md-colors="{background: 'teal-900'}">
-        <div class="row">
-            <div class="card hovercard" 
-                md-colors="{background: 'teal-800'}">
-              <div class="cardheader">
-                <div class="avatar">
-                  <img alt="Foto do Perfil" ng-src="/app/images/avatar.png">
-                </div>
-              </div>
-              <div class="info" 
-                  md-colors="{background: 'teal-700'}">
-                <div class="desc">
-                  <div class="md-subhead">{{ controller.user.email }}</div>
-                </div>
-              </div>
+      <div class="row">
+        <div class="card hovercard" md-colors="{background: 'teal-800'}">
+          <div class="cardheader">
+            <div class="avatar">
+              <img alt="Foto do Perfil" ng-src="/app/images/avatar.png">
             </div>
+          </div>
+          <div class="info" md-colors="{background: 'teal-700'}">
+            <div class="desc">
+              <div class="md-subhead">{{ controller.user.email }}</div>
+            </div>
+          </div>
         </div>
+      </div>
       <md-menu-content md-colors="{background: 'teal-900'}">
         <md-menu-item ng-repeat="option in controller.sideNavOptions" ng-click="close()">
           <md-button md-colors="{color: 'teal-100'}" ng-click="option.action()">
@@ -54,11 +48,13 @@
 
         <span class="md-subhead" ui-sref="app.user.home" hide-gt-md>Aguinaldo Abrantes | Pedidos</span>
 
-        <span class="md-subhead" hide show-gt-md> > <b>Sistema de Pedidos</b></span>
+        <span class="md-subhead" hide show-gt-md> >
+          <b>Sistema de Pedidos</b>
+        </span>
 
         <span flex md-truncate></span>
 
-        <a ui-sref="app.home" >
+        <a ui-sref="app.home">
           <md-button class="md-icon-button" title="Início">
             <md-icon>home</md-icon>
           </md-button>
@@ -70,5 +66,46 @@
         <div flex ui-view="content" layout="column"></div>
       </div>
     </md-content>
+
+    <div style="visibility: hidden; ">
+      <div class="md-dialog-container" id="newRequest" flex>
+        <md-dialog flex="95" flex-gt-md="50">
+          <md-toolbar md-colors="{background: 'teal-800'}">
+            <div class="md-toolbar-tools">
+              <span class="md-title">Editar</span>
+              <span flex></span>
+              <md-button class="md-icon-button" ng-click="controller.cancelDialog()">
+                <md-icon>close</md-icon>
+              </md-button>
+            </div>
+          </md-toolbar>
+          <div layout-padding layout="column">
+            <md-input-container>
+              <md-select ng-model="controller.newRequest.shipment" placeholder="Selecione a Carga">
+                <md-option ng-repeat="shipment in controller.shipments | orderBy:'refDate'" value="shipment.$id">{{shipment.refDate | date:'dd-MM-yyyy'}}</md-option>
+              </md-select>
+            </md-input-container>
+            <md-autocomplete
+                md-selected-item="controller.selectedClient"
+                md-search-text="controller.searchClient"
+                md-items="client in controller.querySearch(controller.searchClient)"
+                md-item-text="client.name"
+                md-min-length="0"
+                placeholder="Selecione o Cliente">
+              <md-item-template>
+                <span md-highlight-text="controller.searchClient" md-highlight-flags="^i">{{client.name}} | {{ client.code }}</span>
+              </md-item-template>
+            </md-autocomplete>
+
+
+
+            <md-button class="md-raised" md-colors="{background: 'default-teal-500'}" title="Enviar" ng-click="controller.updateShipment()"
+              ng-disabled="!controller.isValid(controller.selectedShipment, saveForm.$invalid)">
+              Salvar
+            </md-button>
+          </div>
+        </md-dialog>
+      </div>
+    </div>
   </div>
 </section>

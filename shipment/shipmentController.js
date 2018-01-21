@@ -33,6 +33,10 @@
             });
         }
 
+        controller.cancelDialog = function cancelDialog() {
+            $mdDialog.cancel();
+        };
+
         controller.editShipment = function editShipment(shipment, event) {
             controller.selectedShipment = shipment;
             showDialog('editShipment', false);
@@ -41,10 +45,6 @@
         controller.showShipment = function showShipment(shipment, event) {
             controller.selectedShipment = shipment;
             showDialog('showShipment', true);
-        };
-
-        controller.cancelDialog = function cancelDialog() {
-            $mdDialog.cancel();
         };
 
         controller.updateShipment = function updateShipment() {
