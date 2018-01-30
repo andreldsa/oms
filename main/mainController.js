@@ -9,11 +9,6 @@
 
         controller.user = AuthService.getCurrentUser();
 
-        controller.clients = FirebaseService.getClients();
-        controller.shipments = FirebaseService.getShipments();
-
-        controller.selectedClient;
-
         controller.sideNavOptions = [{
             label: "Início",
             icon: "home",
@@ -45,6 +40,8 @@
                 $state.go("app.product");
             }
         }];
+
+        console.log(controller.sideNavOptions);
 
         controller.isAdmin = function isAdmin(keyInstitution) {
             if (controller.user && controller.user.isAdmin(keyInstitution)) {
@@ -105,19 +102,5 @@
         controller.cancelDialog = function cancelDialog() {
             $mdDialog.cancel();
         };
-
-        controller.querySearch = function querySearch(query) {
-            var results = query ? controller.clients.filter(createFilterFor(query)) : controller.clients,
-                deferred;
-            return controller.clients.filter(createFilterFor(query));
-        };
-
-        function createFilterFor(query) {
-            var lowercaseQuery = angular.lowercase(query);
-            return function filterFn(client) {
-                var name = angular.lowercase(client.name);
-                return (name.indexOf(lowercaseQuery) === 0);
-            };
-        }
     });
 })();
