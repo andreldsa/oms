@@ -24,7 +24,7 @@
       </div>
       <md-menu-content md-colors="{background: 'teal-900'}">
         <md-menu-item ng-repeat="option in controller.sideNavOptions" ng-click="close()">
-          <md-button md-colors="{color: 'teal-100'}" ng-click="option.action()">
+          <md-button md-colors="{color: 'teal-100'}" ng-click="option.action($event)">
             <md-icon md-colors="{color: 'teal-100'}">{{option.icon}}</md-icon>
             {{option.label}}
           </md-button>
@@ -67,23 +67,24 @@
       </div>
     </md-content>
 
-    <!-- <div style="visibility: hidden; ">
-      <div class="md-dialog-container" id="newRequest" flex>
-        <md-dialog flex="95" flex-gt-md="50">
-          <md-toolbar md-colors="{background: 'teal-800'}">
-            <div class="md-toolbar-tools">
-              <span class="md-title">Editar</span>
-              <span flex></span>
-              <md-button class="md-icon-button" ng-click="controller.cancelDialog()">
-                <md-icon>close</md-icon>
-              </md-button>
-            </div>
-          </md-toolbar>
-          <div layout-padding layout="column">
-            <div request></div>
-          </div>
-        </md-dialog>
-      </div>
-    </div> -->
   </div>
 </section>
+
+<div style="visibility: hidden; ">
+  <div class="md-dialog-container" id="newRequest" flex>
+    <md-dialog flex="95" flex-gt-md="50">
+      <md-toolbar md-colors="{background: 'teal-800'}">
+        <div class="md-toolbar-tools">
+          <span class="md-title">Novo Pedido</span>
+          <span flex></span>
+          <md-button class="md-icon-button" ng-click="controller.cancelDialog()">
+            <md-icon>close</md-icon>
+          </md-button>
+        </div>
+      </md-toolbar>
+      <div layout-padding layout="column">
+        <request flex></request>
+      </div>
+    </md-dialog>
+  </div>
+</div>

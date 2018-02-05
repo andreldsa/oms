@@ -1,18 +1,44 @@
-<md-input-container>
-    <md-select ng-model="controller.newRequest.shipment" placeholder="Selecione a Carga">
-        <md-option ng-repeat="shipment in controller.shipments | orderBy:'refDate'" value="shipment.$id">{{shipment.refDate | date:'dd-MM-yyyy'}}</md-option>
-    </md-select>
-</md-input-container>
-<md-autocomplete md-selected-item="controller.selectedClient" md-search-text="controller.searchClient" md-items="client in controller.querySearch(controller.searchClient)"
-    md-item-text="client.name" md-min-length="0" placeholder="Selecione o Cliente">
-    <md-item-template>
-        <span md-highlight-text="controller.searchClient" md-highlight-flags="^i">{{client.name}} | {{ client.code }}</span>
-    </md-item-template>
-</md-autocomplete>
-
-
-
-<md-button class="md-raised" md-colors="{background: 'default-teal-500'}" title="Enviar" ng-click="controller.updateShipment()"
-    ng-disabled="!controller.isValid(controller.selectedShipment, saveForm.$invalid)">
+<div flex layout-gt-md="row" layout="column">
+    <md-input-container flex-gt-md="30">
+        <md-select ng-model="requestCtrl.newRequest.shipment" placeholder="Selecione a Carga">
+            <md-option ng-repeat="shipment in requestCtrl.shipments | orderBy:'refDate'" value="shipment.$id">{{shipment.refDate | date:'dd-MM-yyyy'}}</md-option>
+        </md-select>
+    </md-input-container>
+    <md-autocomplete flex-gt-md md-selected-item="requestCtrl.selectedClient" md-search-text="requestCtrl.searchClient" md-items="client in requestCtrl.querySearch(requestCtrl.searchClient, requestCtrl.clients)"
+        md-item-text="client.name" md-min-length="0" md-floating-label="Nome do Cliente">
+        <md-item-template>
+            <span md-highlight-text="requestCtrl.searchClient" md-highlight-flags="^i">{{client.name}} | {{ client.code }}</span>
+        </md-item-template>
+    </md-autocomplete>
+</div>
+<div layout="row" layout-align="end center">
+    <md-menu>
+        <md-button class="md-icon-button" ng-click="$mdMenu.open()">
+            <md-icon>add</md-icon>
+        </md-button>
+        <md-menu-content width="4">
+            <md-menu-item ng-repeat="product in requestCtrl.products" ng-click="requestCtrl.addItem(product)">
+                <md-button>
+                    {{product.name}}
+                </md-button>
+            </md-menu-item>
+        </md-menu-content>
+    </md-menu>
+</div>
+<div layout="row" layout-align="center">
+    <md-list flex>
+        <md-list-item ng-repeat="item in requestCtrl.newRequest.itens" ng-click="null">
+            <md-icon>done</md-icon>
+            <p>{{item.name}}
+                <b>Preço:</b> {{item.price}}
+            </p>
+            <md-button class="md-icon-button" ng-click="null">
+                {{item.quantity}}
+            </md-button>
+        </md-list-item>
+    </md-list>
+</div>
+<md-button class="md-raised" md-colors="{background: 'default-teal-500'}" title="Enviar" ng-click="null"
+    ng-disabled="!requestCtrl.isValid(requestCtrl.selectedShipment, saveForm.$invalid)">
     Salvar
 </md-button>

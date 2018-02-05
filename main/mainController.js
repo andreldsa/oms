@@ -18,8 +18,8 @@
         }, {
             label: "Novo Pedido",
             icon: "assignment",
-            action: function () {
-                showDialog("newRequest", false);
+            action: function (event) {
+                showDialog("newRequest", false, event);
             }
         }, {
             label: "Gerenciar Cargas",
@@ -40,8 +40,6 @@
                 $state.go("app.product");
             }
         }];
-
-        console.log(controller.sideNavOptions);
 
         controller.isAdmin = function isAdmin(keyInstitution) {
             if (controller.user && controller.user.isAdmin(keyInstitution)) {
@@ -90,7 +88,7 @@
 
         $scope.toggleLeft = buildDelayedToggler('left');
 
-        function showDialog(dialogName, clickOutsideToClose) {
+        function showDialog(dialogName, clickOutsideToClose, event) {
             $mdDialog.show({
                 contentElement: '#' + dialogName,
                 parent: angular.element(document.body),

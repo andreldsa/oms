@@ -6,13 +6,18 @@
 
         controller.clients = FirebaseService.getClients();
         controller.shipments = FirebaseService.getShipments();
+        controller.products = FirebaseService.getProducts();
+
+        controller.newRequest = {
+            itens: []
+        };
 
         controller.selectedClient;
 
-        controller.querySearch = function querySearch(query) {
-            var results = query ? controller.clients.filter(createFilterFor(query)) : controller.clients,
+        controller.querySearch = function querySearch(query, list) {
+            var results = query ? controller.clients.filter(createFilterFor(query)) : list,
                 deferred;
-            return controller.clients.filter(createFilterFor(query));
+            return list.filter(createFilterFor(query));
         };
 
         function createFilterFor(query) {
@@ -22,15 +27,18 @@
                 return (name.indexOf(lowercaseQuery) === 0);
             };
         }
-        console.log("controller")
+
+        controller.addItem = function(product) {
+            product.quantity = 1;
+            controller.newRequest.itens.push(product);
+        }
     });
 
     app.directive('request', function() {
-        console.log("ok")
         return {
             templateUrl: '/app/request/request.html',
             controller: 'RequestController',
-            controllerAs: 'controller'
+            controllerAs: 'requestCtrl'
         }
     });
 })();
