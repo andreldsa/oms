@@ -67,6 +67,12 @@
           <span class="md-subhead">{{controller.selectedShipment.refDate | date:'dd-MM-yyyy' }}</span>
           <b>Descrição | Observações:</b>
           <span class="md-subhead">{{controller.selectedShipment.description}}</span>
+          <md-list>
+            <b>Pedidos:</b>
+            <md-list-item ng-repeat="request in controller.selectedShipment.requests" ng-click="null">
+              {{controller.getClient(request.clientId).name}} | {{request.itens.length}} item(s)
+            </md-list-item>
+          </md-list>
         </div>
       </md-dialog>
     </div>

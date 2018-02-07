@@ -1,7 +1,7 @@
 <div flex layout-gt-md="row" layout="column">
     <md-input-container flex-gt-md="30">
-        <md-select ng-model="requestCtrl.newRequest.shipment" placeholder="Selecione a Carga">
-            <md-option ng-repeat="shipment in requestCtrl.shipments | orderBy:'refDate'" value="shipment.$id">{{shipment.refDate | date:'dd-MM-yyyy'}}</md-option>
+        <md-select ng-model="requestCtrl.selectedShipment" placeholder="Selecione a Carga">
+            <md-option ng-repeat="shipment in requestCtrl.shipments | orderBy:'refDate'" ng-value="shipment">{{shipment.refDate | date:'dd-MM-yyyy'}}</md-option>
         </md-select>
     </md-input-container>
     <md-autocomplete flex-gt-md md-selected-item="requestCtrl.selectedClient" md-search-text="requestCtrl.searchClient" md-items="client in requestCtrl.querySearch(requestCtrl.searchClient, requestCtrl.clients)"
@@ -27,18 +27,25 @@
 </div>
 <div layout="row" layout-align="center">
     <md-list flex>
-        <md-list-item ng-repeat="item in requestCtrl.newRequest.itens" ng-click="null">
-            <md-icon>done</md-icon>
-            <p>{{item.name}}
-                <b>Preço:</b> {{item.price}}
+        <md-list-item ng-repeat="item in requestCtrl.newRequest.itens" ng-click="null" flex-xs="column">
+            <md-button class="md-icon-button" ng-click="requestCtrl.removeItem($index)">
+                <md-icon md-colors="{color: 'red-800'}">close</md-icon>
+            </md-button>
+            <p>
+                <b>{{item.name}}</b> | {{item.price | currency:'R$ '}}
             </p>
-            <md-button class="md-icon-button" ng-click="null">
-                {{item.quantity}}
+            <md-button class="md-icon-button" ng-click="item.quantity = item.quantity - 1">
+                <md-icon>remove_circle</md-icon>
+            </md-button>
+            <md-button>
+                {{item.quantity}} {{item.unit}}
+            </md-button>
+            <md-button class="md-icon-button" ng-click="item.quantity = item.quantity + 1">
+                <md-icon>add_circle</md-icon>
             </md-button>
         </md-list-item>
     </md-list>
 </div>
-<md-button class="md-raised" md-colors="{background: 'default-teal-500'}" title="Enviar" ng-click="null"
-    ng-disabled="!requestCtrl.isValid(requestCtrl.selectedShipment, saveForm.$invalid)">
+<md-button class="md-raised" md-colors="{background: 'default-teal-500'}" title="Enviar" ng-click="requestCtrl.save()" ng-disabled="!requestCtrl.isValid()">
     Salvar
 </md-button>

@@ -17,7 +17,7 @@
         controller.createProduct = function createProduct() {
             FirebaseService.addProduct(controller.newProduct).then(function() {
                 controller.newProduct = undefined;
-                MessageService.showToast("Producte cadastrado com sucesso.");
+                MessageService.showToast("Produto cadastrado com sucesso.");
             });
         };
 
@@ -48,7 +48,7 @@
             FirebaseService.updateProduct(controller.selectedProduct).then(function() {
                 controller.selectedProduct = undefined;
                 $mdDialog.cancel();
-                MessageService.showToast("Producte atualizado com sucesso.");
+                MessageService.showToast("Produto atualizado com sucesso.");
             });
         };
 

@@ -9,6 +9,8 @@
         controller.shipments;
         controller.newShipment;
         controller.selectedShipment;
+        
+        controller.clients = FirebaseService.getClients();
 
         controller.isValid = function isValid(shipment, formInvalid) {
             return shipment && shipment.refDate && !formInvalid;
@@ -31,6 +33,10 @@
                 targetEvent: event,
                 clickOutsideToClose: clickOutsideToClose
             });
+        }
+
+        controller.getClient = function getClient(clientId) {
+            return controller.clients.$getRecord(clientId);
         }
 
         controller.cancelDialog = function cancelDialog() {

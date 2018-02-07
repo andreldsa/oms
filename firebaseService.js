@@ -52,5 +52,18 @@
         service.getShipments = function getShipments() {
             return shipmentsArray;
         };
+
+        service.addRequest = function addRequest(shipmentId, request) {
+            var requestsRef = firebaseRef.child("shipments/"+shipmentId+"/requests/");
+            return $firebaseArray(requestsRef).$add(request);
+        };
+
+        service.updateRequest = function updateRequest(request) {
+            return requestsArray.$save(request);
+        };
+
+        service.getRequests = function getRequests() {
+            return requestsArray;
+        };
     });
 })();
