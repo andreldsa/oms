@@ -62,8 +62,9 @@
             return requestsArray.$save(request);
         };
 
-        service.getRequests = function getRequests() {
-            return requestsArray;
+        service.getRequests = function getRequests(shipmentId) {
+            var requestsRef = firebaseRef.child("shipments/"+shipmentId+"/requests/");
+            return $firebaseArray(requestsRef);
         };
     });
 })();

@@ -20,7 +20,7 @@
             ng-click="controller.showShipment(shipment)">
             <md-icon>local_shipping</md-icon>
             <div class="md-list-item-text">
-              <h3>{{ shipment.refDate | date:'dd-MM-yyyy' }}</h3>
+              <h3><b>{{ shipment.refDate | date:'dd-MM-yyyy' }}</b> | Carga: <b>{{ controller.getWeight(shipment) }} kg </b></h3>
               <p>
                 <b>Obs.:</b> {{ shipment.description || "N/A" }}</p>
             </div>
@@ -68,9 +68,19 @@
           <b>Descrição | Observações:</b>
           <span class="md-subhead">{{controller.selectedShipment.description}}</span>
           <md-list>
-            <b>Pedidos:</b>
-            <md-list-item ng-repeat="request in controller.selectedShipment.requests" ng-click="null">
-              {{controller.getClient(request.clientId).name}} | {{request.itens.length}} item(s)
+              <b>Pedidos:</b>
+            <md-list-item ng-init="client = controller.getClient(request.clientId)" ng-click="null"
+                ng-repeat="request in controller.requestsOfShipment" class="md-3-line">
+              <div class="md-list-item-text">
+                <h3><b>{{client.name}} - {{client.code}}</b></h3>
+                <h4 style="margin-left: 10px" ng-repeat="item in request.itens">
+                  <b>{{item.quantity}} {{item.unit}}</b> de <b>{{item.name}}</b> a <b>{{item.price | currency:"R$ "}}</b>
+                </h4>
+              </div>
+              <md-button class="md-icon-button" ng-click="controller.removeRequest(request, $event)">
+                <md-icon>close</md-icon>
+              </md-button>
+              <md-divider ng-if="!$last"></md-divider>
             </md-list-item>
           </md-list>
         </div>

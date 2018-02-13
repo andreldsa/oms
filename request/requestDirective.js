@@ -31,7 +31,6 @@
             }
 
             controller.removeItem = function(index) {
-                console.log(index);
                 controller.newRequest.itens.splice(index, 1);
             };
 
