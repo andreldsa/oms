@@ -13,7 +13,7 @@
     ]);
 
     app.config(function($mdIconProvider, $mdThemingProvider, $stateProvider, $urlMatcherFactoryProvider,
-        $urlRouterProvider, $locationProvider, $httpProvider, $sceDelegateProvider) {
+        $urlRouterProvider, $locationProvider, $httpProvider, $sceDelegateProvider, $mdDateLocaleProvider) {
 
         $mdIconProvider.fontSet('md', 'material-icons');
         $mdThemingProvider.theme('docs-dark');
@@ -23,6 +23,10 @@
             .primaryPalette('teal');
 
         $urlMatcherFactoryProvider.caseInsensitive(true);
+
+        $mdDateLocaleProvider.formatDate = function (date) {
+            return moment(date).format('DD-MM-YYYY');
+        };
 
         $stateProvider
             .state("app", {
