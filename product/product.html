@@ -25,7 +25,7 @@
                 <b>Código:</b> {{ product.code }}</p>
             </div>
             <md-button class="md-icon-button">
-              <md-icon ng-click="controller.removeProduct(product, $event)">close</md-icon>
+              <md-icon md-colors="{color: 'red-800'}" ng-click="controller.removeProduct(product, $event)">close</md-icon>
             </md-button>
             <md-button class="md-icon-button">
               <md-icon ng-click="controller.editProduct(product)">edit</md-icon>

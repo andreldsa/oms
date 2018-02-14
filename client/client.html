@@ -25,6 +25,9 @@
                 <b>Código:</b> {{ client.code }}</p>
             </div>
             <md-button class="md-icon-button">
+              <md-icon md-colors="{color: 'red-800'}" ng-click="controller.removeClient(client, $event)">close</md-icon>
+            </md-button>
+            <md-button class="md-icon-button">
               <md-icon ng-click="controller.editClient(client)">edit</md-icon>
             </md-button>
           </md-list-item>

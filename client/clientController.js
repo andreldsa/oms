@@ -51,6 +51,21 @@
                 MessageService.showToast("Cliente atualizado com sucesso.");
             });
         };
+        
+        controller.removeClient = function removeClient(client, event) {
+            var confirm = $mdDialog.confirm()
+                .title('Tem certeza que deseja remover?')
+                .targetEvent(event)
+                .ok('Sim')
+                .cancel('Não');
+
+            $mdDialog.show(confirm).then(function () {
+                var record = controller.clients.$indexFor(client.$id)
+                controller.clients.$remove(record).then(function () {
+                    MessageService.showToast("Cliente removido com sucesso.");
+                });
+            })
+        };
 
         (function main() {
             controller.clients = FirebaseService.getClients();
