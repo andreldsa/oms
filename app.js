@@ -34,7 +34,7 @@
                 views: {
                     main: {
                         templateUrl: "app/main/main.html",
-                        controller: "MainController as controller"
+                        controller: "MainController as mainCtrl"
                     }
                 }
             })
@@ -63,6 +63,18 @@
                         templateUrl: "app/shipment/shipment.html",
                         controller: "ShipmentController as controller"
                     }
+                }
+            })
+            .state("app.print", {
+                url: "/shipment/:id/print",
+                views: {
+                    content: {
+                        templateUrl: "app/shipment/print.html",
+                        controller: "PrintShipmentController as controller"
+                    }
+                },
+                params: {
+                    id: null
                 }
             })
             .state("app.product", {

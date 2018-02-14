@@ -90,3 +90,13 @@
 .card.hovercard .avatar.inst {
     top: 30px;
 }
+
+@media print {
+    .hide-print {
+        display: none;
+    }
+
+    @page {
+        margin: 20px;
+    }
+}

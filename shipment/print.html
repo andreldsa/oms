@@ -1,0 +1,49 @@
+<div layout="row">
+    <div flex>
+        <div layout="column" layout-align="center center" ng-if="!controller.shipment">
+            <span class="md-subhead">Carregando Dados da Carga</span>
+            <md-progress-circular class="md-hue-2" md-diameter="40px"></md-progress-circular>
+        </div>
+        <md-fab-speed-dial class="md-fab-top-right hide-print" ng-if="controller.shipment">
+            <md-fab-trigger>
+                <md-button aria-label="Print" ng-click="controller.print()" class="md-fab md-primary" md-colors="{background: 'teal-900'}">
+                    <md-icon>print</md-icon>
+                </md-button>
+            </md-fab-trigger>
+        </md-fab-speed-dial>
+        <div layout-padding layout="column" ng-if="controller.shipment">
+            <span class="md-headline">Relatório de Carga</span>
+            <span class="md-caption">
+                <b>Data de Referência:</b> {{controller.shipment.refDate | date:"dd-MM-yyyy"}}</span>
+            <span class="md-caption">
+                <b>Peso da Carga:</b> {{ controller.getWeight() }} kg</span>
+            <span class="md-caption">
+                <b>Número de Pedidos:</b> {{controller.requestsOfShipment.length }}</span>
+            <span class="md-caption">
+                <b>Descrição/Observações:</b> {{ controller.shipment.description || 'N/A' }}</span>
+        </div>
+        <div ng-if="controller.shipment" layout-padding>
+            <div ng-init="client = controller.getClient(request.clientId)" ng-repeat="request in controller.requestsOfShipment">
+                <span class="md-subheader">
+                    <b>{{client.name}} - {{client.code}}</b>
+                </span>
+                <div ng-repeat="item in request.itens" style="margin:10px">
+                    <div layout="row" style="margin:10px 0 10px 0">
+                        <div flex-xs="15" flex-gt-xs="5" layout-align="center center">
+                            <center>
+                                <span class="md-caption">{{item.quantity}} {{item.unit}}</span>
+                            </center>
+                        </div>
+                        <div flex layout-align="start">
+                            <span class="md-caption">{{item.name}}</span>
+                        </div>
+                        <div flex-xs="20" flex-gt-xs="10" layout-align="center center">
+                            <span class="md-caption">{{item.price | currency:"R$ "}}</span>
+                        </div>
+                    </div>
+                    <md-divider></md-divider>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
