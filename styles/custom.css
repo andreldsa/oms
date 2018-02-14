@@ -91,6 +91,10 @@
     top: 30px;
 }
 
+.small-button {
+    font-size: 10px; 
+}
+
 @media print {
     .hide-print {
         display: none;

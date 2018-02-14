@@ -27,20 +27,26 @@
 </div>
 <div layout="row" layout-align="center">
     <md-list flex>
-        <md-list-item ng-repeat="item in requestCtrl.newRequest.itens" ng-click="null" flex-xs="column">
-            <md-button class="md-icon-button" ng-click="requestCtrl.removeItem($index)">
+        <md-list-item ng-repeat="item in requestCtrl.newRequest.itens" ng-click="null" class="md-2-line noright">
+            <md-button class="md-icon-button" ng-click="requestCtrl.removeItem($index)" hide-xs>
                 <md-icon md-colors="{color: 'red-800'}">close</md-icon>
             </md-button>
-            <p>
-                <b>{{item.name}}</b> | {{item.price | currency:'R$ '}}
-            </p>
-            <md-button class="md-icon-button" ng-click="item.quantity = item.quantity - 1">
+            <div class="md-list-item-text" layout="column">
+                <h3>{{item.name}}</h3>
+                <h4>
+                    {{item.price | currency:'R$ '}}
+                    <md-button class="md-icon-button" ng-click="requestCtrl.removeItem($index)" hide show-xs>
+                        <md-icon class="small-icon" md-colors="{color: 'red-800'}">close</md-icon>
+                    </md-button>
+                </h4>
+            </div>
+            <md-button class="md-secondary md-icon-button" ng-click="item.quantity = item.quantity - 1">
                 <md-icon>remove_circle</md-icon>
             </md-button>
-            <md-button>
+            <span class="md-secondary">
                 {{item.quantity}} {{item.unit}}
-            </md-button>
-            <md-button class="md-icon-button" ng-click="item.quantity = item.quantity + 1">
+            </span>
+            <md-button class="md-secondary md-icon-button" ng-click="item.quantity = item.quantity + 1">
                 <md-icon>add_circle</md-icon>
             </md-button>
         </md-list-item>
