@@ -51,6 +51,21 @@
                 MessageService.showToast("Produto atualizado com sucesso.");
             });
         };
+        
+        controller.removeProduct = function removeProduct(product, event) {
+            var confirm = $mdDialog.confirm()
+                .title('Tem certeza que deseja remover?')
+                .targetEvent(event)
+                .ok('Sim')
+                .cancel('Não');
+
+            $mdDialog.show(confirm).then(function () {
+                var record = controller.products.$indexFor(product.$id)
+                controller.products.$remove(record).then(function () {
+                    MessageService.showToast("Produto removido com sucesso.");
+                });
+            })
+        };
 
         (function main() {
             controller.products = FirebaseService.getProducts();
